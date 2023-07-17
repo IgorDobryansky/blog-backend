@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :comments
   end
 
-  post '/register', to: 'users#create'
+  post '/registration', to: 'users#create'
   post '/login', to: 'users#login'
   get '/auto_login', to: 'users#auto_login'
 end
