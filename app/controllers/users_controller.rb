@@ -8,7 +8,7 @@ class UsersController < ApplicationController
       genereted_token = encode_token({ user_id: @user.id })
       render json: { user: { id: @user.id, username: @user.username, token: genereted_token }, status: 'created' }
     else
-      render json: { error: 'Invalid username or password' }
+      render json: { error: 'User already exist' }, status: :conflict
     end
   end
 
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       genereted_token = encode_token({ user_id: @user.id })
       render json: { user: { id: @user.id, username: @user.username, token: genereted_token }, status: 'logged_in' }
     else
-      render json: { error: 'Invalid username or password' }
+      render json: { error: 'Invalid username or password' }, status: :conflict
     end
   end
 

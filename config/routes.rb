@@ -3,9 +3,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root 'posts#index'
-  # resources :comments
+
   resources :posts do
-    resources :comments
+    resources :post_likes
+    resources :comments do
+      resources :comment_likes
+    end
   end
 
   post '/registration', to: 'users#create'

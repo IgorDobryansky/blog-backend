@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :notes
+  has_many :posts
   has_many :comments
   has_secure_password
 

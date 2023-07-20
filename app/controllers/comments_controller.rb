@@ -4,9 +4,9 @@ class CommentsController < ApplicationController
 
   # GET /comments
   def index
-    @comments = Comment.where(post_id: params[:post_id])
+    @comments = Comment.where(post_id: params[:post_id]).sort { |x, y| -(x['created_at'] <=> y['created_at']) }
 
-    render json: @comments.reverse
+    render json: @comments
   end
 
   # GET /comments/1
@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
 
     if @comment.save
-      render json: @comment, status: :created
+      render json: { status: 'created' }
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -41,12 +41,10 @@ class CommentsController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_comment
     @comment = Comment.find(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
   def comment_params
     params.require(:comment).permit(:text, :post_id, :user_id, :username)
   end

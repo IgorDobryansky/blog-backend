@@ -4,9 +4,9 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.all
+    @posts = Post.all.sort { |x, y| -(x['created_at'] <=> y['created_at']) }
 
-    render json: @posts.reverse
+    render json: @posts
   end
 
   # GET /posts/1
@@ -19,16 +19,16 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
 
     if @post.save
-      render json: @post, status: :created
+      render json: { status: 'created' }
     else
-      render json: @post.errors, status: :unprocessable_entity
+      render json: @post.errors.full_messages, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /posts/1
   def update
     if @post.update(post_params)
-      render json: @post
+      render json: { status: 'updated' }
     else
       render json: @post.errors, status: :unprocessable_entity
     end
@@ -36,21 +36,17 @@ class PostsController < ApplicationController
 
   # DELETE /posts/1
   def destroy
-
-
     @post.destroy
     render json: { status: 'deleted' }
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_post
     @post = Post.find(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
   def post_params
-    params.require(:post).permit(:text, :user_id, :username, :post_id)
+    params.require(:post).permit(:text, :user_id, :username)
   end
 end
